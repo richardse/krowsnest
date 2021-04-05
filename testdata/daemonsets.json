@@ -1,0 +1,356 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "DaemonSet",
+            "metadata": {
+                "annotations": {
+                    "deprecated.daemonset.template.generation": "1",
+                    "objectset.rio.cattle.io/applied": "H4sIAAAAAAAA/8yUwW7jNhCGX6WYM6VIlpyoBHpYJDkE7SaG7e0lCAKKHMesKVIgR9oYht69oJysne3GKdoeetRw5tPw/4ezg422CjhcCWycXSABA9Hq39EH7SxwEG0bzvocGDRIQgkSwHdgRYPAIfTS1EmzTTwaFAGTr86r1mMIwMac0AoZExWuRGciXHoUpJ1d6gYDiaYFbjtjGBhRowkR7uo/UFJASr12qRREBlPtztYirIFDmdWY5WU1Lc+nsqjyKeZVtRJ5doHZRX2Rl9OJUrg6Bxb7k86Sd8agTzdFOKJZpzCgQUnOA4eVMAFhYCCsdTS2eLIZrfb3P/CBvZvsvlr0yVO/AQ5nfc5++lVb9csCfa8lflj3IvY7Mn9c+70JA4PxcI4r9GglBuD3u7e2j46/zMahz9OddKMm1XlVri6mkyQrsEhKJYtETPJJUhRVJmT2s7rIozVHunHyHQ4PA4PQooyiH3zZQSNIrn/7NhyibU8P3jAwIGxaIwjH+qOx/RvD9yH/9FSFXp4SaTi6ZGQIbdHv5X8pM3XSOk9JlQED3YinGPTCyjX6s43RbYs+MTXvszRPJ8AgZr9PWLtAM+cJeJWxwy8PodY7ctIZ4LC8nMHwwABtf8xbzC8fZ3fzJTDoheliqMpgYN8Srq4Xy8fZ/G55d5Qywr7P+ZByMzs6z7O0LNJ8Mk2r87Exj8F1fpzX3fCizqwzZuaMllvgcLO6dTTzGNDGXRNQdl7T9tJZwmcaRRetqLXRpHFvt1LA7+H2evn46erzzS08DMNRU69almXxb+3YIw5+lGXxF0PG2D9yJNL/A0t+hPl/ePLAgJxB/7qZ73ewwciPezzxzmC66Wr0FglDfImNCLRfym2sGpf89bMOFJ8wrlYoCTjcuoVco+oMjvfeIy+9Ji2F+aSUs+HOmu0PMcNDfM5dqwThgrwgfNrG/mnbRqnmzhhtn76M58DAv/keN9vzFyt6oY2oDQLPh3E9kKBu1EF23qOl266p0b+2qYBnDOwY+6xDeBNWGLRH9X7FHIXaAs+G4c8AAAD//8CrDLf6BwAA",
+                    "objectset.rio.cattle.io/id": "svccontroller",
+                    "objectset.rio.cattle.io/owner-gvk": "/v1, Kind=Service",
+                    "objectset.rio.cattle.io/owner-name": "my-release-wordpress",
+                    "objectset.rio.cattle.io/owner-namespace": "default"
+                },
+                "creationTimestamp": "2021-04-03T19:27:20Z",
+                "generation": 1,
+                "labels": {
+                    "objectset.rio.cattle.io/hash": "40be01485465c3815e188fa107e07b71452ddef6",
+                    "svccontroller.k3s.cattle.io/nodeselector": "false"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deprecated.daemonset.template.generation": {},
+                                    "f:objectset.rio.cattle.io/applied": {},
+                                    "f:objectset.rio.cattle.io/id": {},
+                                    "f:objectset.rio.cattle.io/owner-gvk": {},
+                                    "f:objectset.rio.cattle.io/owner-name": {},
+                                    "f:objectset.rio.cattle.io/owner-namespace": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:objectset.rio.cattle.io/hash": {},
+                                    "f:svccontroller.k3s.cattle.io/nodeselector": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"8684f752-03e3-4dc3-a212-3380ac09d716\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:revisionHistoryLimit": {},
+                                "f:selector": {
+                                    "f:matchLabels": {
+                                        ".": {},
+                                        "f:app": {}
+                                    }
+                                },
+                                "f:template": {
+                                    "f:metadata": {
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:app": {},
+                                            "f:svccontroller.k3s.cattle.io/svcname": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        "f:containers": {
+                                            "k:{\"name\":\"lb-port-443\"}": {
+                                                ".": {},
+                                                "f:env": {
+                                                    ".": {},
+                                                    "k:{\"name\":\"DEST_IP\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"DEST_PORT\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"DEST_PROTO\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"SRC_PORT\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    }
+                                                },
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:ports": {
+                                                    ".": {},
+                                                    "k:{\"containerPort\":443,\"protocol\":\"TCP\"}": {
+                                                        ".": {},
+                                                        "f:containerPort": {},
+                                                        "f:hostPort": {},
+                                                        "f:name": {},
+                                                        "f:protocol": {}
+                                                    }
+                                                },
+                                                "f:resources": {},
+                                                "f:securityContext": {
+                                                    ".": {},
+                                                    "f:capabilities": {
+                                                        ".": {},
+                                                        "f:add": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {}
+                                            },
+                                            "k:{\"name\":\"lb-port-80\"}": {
+                                                ".": {},
+                                                "f:env": {
+                                                    ".": {},
+                                                    "k:{\"name\":\"DEST_IP\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"DEST_PORT\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"DEST_PROTO\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    },
+                                                    "k:{\"name\":\"SRC_PORT\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    }
+                                                },
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:ports": {
+                                                    ".": {},
+                                                    "k:{\"containerPort\":80,\"protocol\":\"TCP\"}": {
+                                                        ".": {},
+                                                        "f:containerPort": {},
+                                                        "f:hostPort": {},
+                                                        "f:name": {},
+                                                        "f:protocol": {}
+                                                    }
+                                                },
+                                                "f:resources": {},
+                                                "f:securityContext": {
+                                                    ".": {},
+                                                    "f:capabilities": {
+                                                        ".": {},
+                                                        "f:add": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {}
+                                            }
+                                        },
+                                        "f:dnsPolicy": {},
+                                        "f:restartPolicy": {},
+                                        "f:schedulerName": {},
+                                        "f:securityContext": {},
+                                        "f:terminationGracePeriodSeconds": {},
+                                        "f:tolerations": {}
+                                    }
+                                },
+                                "f:updateStrategy": {
+                                    "f:rollingUpdate": {
+                                        ".": {},
+                                        "f:maxUnavailable": {}
+                                    },
+                                    "f:type": {}
+                                }
+                            },
+                            "f:status": {
+                                "f:currentNumberScheduled": {},
+                                "f:desiredNumberScheduled": {},
+                                "f:numberUnavailable": {},
+                                "f:observedGeneration": {},
+                                "f:updatedNumberScheduled": {}
+                            }
+                        },
+                        "manager": "k3s",
+                        "operation": "Update",
+                        "time": "2021-04-03T19:27:22Z"
+                    }
+                ],
+                "name": "svclb-my-release-wordpress",
+                "namespace": "default",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "v1",
+                        "controller": true,
+                        "kind": "Service",
+                        "name": "my-release-wordpress",
+                        "uid": "8684f752-03e3-4dc3-a212-3380ac09d716"
+                    }
+                ],
+                "resourceVersion": "61215",
+                "selfLink": "/apis/apps/v1/namespaces/default/daemonsets/svclb-my-release-wordpress",
+                "uid": "ed00649d-23c3-4d9f-a2ca-1e7d71927b97"
+            },
+            "spec": {
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "svclb-my-release-wordpress"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "svclb-my-release-wordpress",
+                            "svccontroller.k3s.cattle.io/svcname": "my-release-wordpress"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "SRC_PORT",
+                                        "value": "80"
+                                    },
+                                    {
+                                        "name": "DEST_PROTO",
+                                        "value": "TCP"
+                                    },
+                                    {
+                                        "name": "DEST_PORT",
+                                        "value": "80"
+                                    },
+                                    {
+                                        "name": "DEST_IP",
+                                        "value": "10.43.125.86"
+                                    }
+                                ],
+                                "image": "rancher/klipper-lb:v0.1.2",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "lb-port-80",
+                                "ports": [
+                                    {
+                                        "containerPort": 80,
+                                        "hostPort": 80,
+                                        "name": "lb-port-80",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "securityContext": {
+                                    "capabilities": {
+                                        "add": [
+                                            "NET_ADMIN"
+                                        ]
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            },
+                            {
+                                "env": [
+                                    {
+                                        "name": "SRC_PORT",
+                                        "value": "443"
+                                    },
+                                    {
+                                        "name": "DEST_PROTO",
+                                        "value": "TCP"
+                                    },
+                                    {
+                                        "name": "DEST_PORT",
+                                        "value": "443"
+                                    },
+                                    {
+                                        "name": "DEST_IP",
+                                        "value": "10.43.125.86"
+                                    }
+                                ],
+                                "image": "rancher/klipper-lb:v0.1.2",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "lb-port-443",
+                                "ports": [
+                                    {
+                                        "containerPort": 443,
+                                        "hostPort": 443,
+                                        "name": "lb-port-443",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "securityContext": {
+                                    "capabilities": {
+                                        "add": [
+                                            "NET_ADMIN"
+                                        ]
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "tolerations": [
+                            {
+                                "effect": "NoSchedule",
+                                "key": "node-role.kubernetes.io/master",
+                                "operator": "Exists"
+                            },
+                            {
+                                "key": "CriticalAddonsOnly",
+                                "operator": "Exists"
+                            }
+                        ]
+                    }
+                },
+                "updateStrategy": {
+                    "rollingUpdate": {
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                }
+            },
+            "status": {
+                "currentNumberScheduled": 1,
+                "desiredNumberScheduled": 1,
+                "numberMisscheduled": 0,
+                "numberReady": 0,
+                "numberUnavailable": 1,
+                "observedGeneration": 1,
+                "updatedNumberScheduled": 1
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}
