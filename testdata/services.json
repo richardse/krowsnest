@@ -10,39 +10,6 @@
                     "component": "apiserver",
                     "provider": "kubernetes"
                 },
-                "managedFields": [
-                    {
-                        "apiVersion": "v1",
-                        "fieldsType": "FieldsV1",
-                        "fieldsV1": {
-                            "f:metadata": {
-                                "f:labels": {
-                                    ".": {},
-                                    "f:component": {},
-                                    "f:provider": {}
-                                }
-                            },
-                            "f:spec": {
-                                "f:clusterIP": {},
-                                "f:ports": {
-                                    ".": {},
-                                    "k:{\"port\":443,\"protocol\":\"TCP\"}": {
-                                        ".": {},
-                                        "f:name": {},
-                                        "f:port": {},
-                                        "f:protocol": {},
-                                        "f:targetPort": {}
-                                    }
-                                },
-                                "f:sessionAffinity": {},
-                                "f:type": {}
-                            }
-                        },
-                        "manager": "k3s",
-                        "operation": "Update",
-                        "time": "2021-04-02T19:05:32Z"
-                    }
-                ],
                 "name": "kubernetes",
                 "namespace": "default",
                 "resourceVersion": "169",
@@ -59,6 +26,10 @@
                         "targetPort": 6443
                     }
                 ],
+                "selector": {
+                    "app.kubernetes.io/instance": "pod",
+                    "app.kubernetes.io/name": "kubernetes"
+                },
                 "sessionAffinity": "None",
                 "type": "ClusterIP"
             },
@@ -82,52 +53,6 @@
                     "app.kubernetes.io/name": "mariadb",
                     "helm.sh/chart": "mariadb-9.3.6"
                 },
-                "managedFields": [
-                    {
-                        "apiVersion": "v1",
-                        "fieldsType": "FieldsV1",
-                        "fieldsV1": {
-                            "f:metadata": {
-                                "f:annotations": {
-                                    ".": {},
-                                    "f:meta.helm.sh/release-name": {},
-                                    "f:meta.helm.sh/release-namespace": {}
-                                },
-                                "f:labels": {
-                                    ".": {},
-                                    "f:app.kubernetes.io/component": {},
-                                    "f:app.kubernetes.io/instance": {},
-                                    "f:app.kubernetes.io/managed-by": {},
-                                    "f:app.kubernetes.io/name": {},
-                                    "f:helm.sh/chart": {}
-                                }
-                            },
-                            "f:spec": {
-                                "f:ports": {
-                                    ".": {},
-                                    "k:{\"port\":3306,\"protocol\":\"TCP\"}": {
-                                        ".": {},
-                                        "f:name": {},
-                                        "f:port": {},
-                                        "f:protocol": {},
-                                        "f:targetPort": {}
-                                    }
-                                },
-                                "f:selector": {
-                                    ".": {},
-                                    "f:app.kubernetes.io/component": {},
-                                    "f:app.kubernetes.io/instance": {},
-                                    "f:app.kubernetes.io/name": {}
-                                },
-                                "f:sessionAffinity": {},
-                                "f:type": {}
-                            }
-                        },
-                        "manager": "Go-http-client",
-                        "operation": "Update",
-                        "time": "2021-04-03T19:27:20Z"
-                    }
-                ],
                 "name": "my-release-mariadb",
                 "namespace": "default",
                 "resourceVersion": "61178",

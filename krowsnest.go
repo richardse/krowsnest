@@ -1,21 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"os"
 	"regexp"
 
 	pretty "github.com/kr/pretty"
-
-	apiv1 "k8s.io/api/core/v1"
 )
 
-var validTemplatePath = regexp.MustCompile("^/([a-zA-Z0-9]+).html$")
+var validStaticPath = regexp.MustCompile("^/static/([a-zA-Z0-9]+).(html|js)$")
 var validK8sPath = regexp.MustCompile("^/k8s/(daemonsets|deployments|pods|replicasets|services|statefulsets)$")
 
 func loadK8sData(objtype string) (string, error) {
@@ -27,24 +23,27 @@ func loadK8sData(objtype string) (string, error) {
 	return string(body), nil
 }
 
-func templateHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
-	if r.URL.Path == "/" {
-		r.URL.Path = "/index.html"
-	}
-	m := validTemplatePath.FindStringSubmatch(r.URL.Path)
+func redirectHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/index.html", http.StatusFound)
+}
+
+func staticHandler(w http.ResponseWriter, r *http.Request) {
+	m := validStaticPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
+		fmt.Printf("404 %s\n", r.URL.Path)
 		http.NotFound(w, r)
 		return
 	}
 
-	filename := "templates/" + m[1]
+	filename := fmt.Sprintf("wwwroot/%s.%s", m[1], m[2])
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
+		fmt.Printf("404 %s\n", filename)
+		http.NotFound(w, r)
 		return
 	}
 
+	fmt.Printf("200 %s\n", filename)
 	fmt.Fprintf(w, string(body))
 }
 
@@ -67,26 +66,16 @@ func k8sHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func mermaidHandler(w http.ResponseWriter, r *http.Request) {
-	file, err := os.Open("testdata/pods.json")
-	if err != nil {
-		panic(err.Error())
-	}
-	dec := json.NewDecoder(file)
-
-	// Parse it into the internal k8s structs
-	var dep apiv1.PodList
-
-	dec.Decode(&dep)
-
-	// Dump the struct in case you want to see what it looks like
-	pretty.Println(dep.Items[0])
+	chart := generateChart(loadPods(), loadServices(), loadStatefulSets(), loadReplicaSets(), loadIngresses())
+	fmt.Fprint(w, chart)
 }
 
 func main() {
-	http.HandleFunc("/", templateHandler)
-	http.HandleFunc("/index.html", templateHandler)
+	http.HandleFunc("/index.html", staticHandler)
 	http.HandleFunc("/k8s/", k8sHandler)
+	http.HandleFunc("/static/", staticHandler)
 	http.HandleFunc("/mermaid", mermaidHandler)
+	//http.HandleFunc("/", redirectHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
