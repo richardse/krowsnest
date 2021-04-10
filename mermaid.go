@@ -147,6 +147,22 @@ func ingressNode(obj extensionsv1beta1.Ingress) string {
 	return fmt.Sprintf("ING%s(\"%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name)
 }
 
+func containerNode(pod apiv1.Pod, container apiv1.Container) string {
+	for _, c := range pod.Status.ContainerStatuses {
+		if c.Name == container.Name {
+			var statusMessage string
+			if c.State.Running != nil {
+				statusMessage = fmt.Sprintf("Running since %s", c.State.Running.StartedAt)
+			} else if c.State.Terminated != nil {
+				statusMessage = fmt.Sprintf("Terminated since %s", c.State.Running.StartedAt)
+			} else if c.State.Waiting != nil {
+				statusMessage = c.State.Waiting.Message
+			}
+			return fmt.Sprintf("CNT%s%s(\"%s<br />%s\")", pod.ObjectMeta.Name, container.Name, container.Name, statusMessage)
+		}
+	}
+}
+
 func selectorToString(selectors map[string]string) string {
 	responses := make([]string, len(selectors))
 	i := 0
@@ -160,16 +176,6 @@ func selectorToString(selectors map[string]string) string {
 	return strings.Join(responses, ",<br/>")
 }
 
-/*
-func containerToNode(pod apiv1.Pod, container apiv1.Container) {
-  status := pod.Status.ContainerStatuses. "find pod container with same name as container"
-  statusMessage = status.State.Running != nil ? "Running since {status.State.Running.StartedAt}" :
-  status.State.Terminated != nil ? "Terminated since {status.State.Terminated.FinishedAt}" :
-  status.State.Waiting != nil ? status.State.Waiting.Message : ""
-
-  return "CNT" + FS(pod.ObjectMeta.Name) + FS(container.Name) + "(\"" + container.Name + "<br /><center>" + statusMessage + "</center>\")"
-}
-*/
 func generateChart(podList apiv1.PodList, serviceList apiv1.ServiceList, statefulSetList appsv1.StatefulSetList, replicaSetList appsv1.ReplicaSetList, ingressList extensionsv1beta1.IngressList) string {
 
 	chart := "graph LR\n"

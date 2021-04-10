@@ -30,20 +30,3 @@ RSETmy-release-wordpress-67855bb4bc --> PODmy-release-wordpress-67855bb4bc-rzrfd
 	}
 }
 
-func TestServiceString(t *testing.T) {
-  mermaid = ""
-  portName := portName != "" ? $" ({portName})" : ""
-  if mermaid != `SVC{mermaidName}{port}(\"<a href='https://dashboard/#/service/{ns}/{name}?namespace={ns}'>{name}:{port}{portName}</a><br /><a style='float: right' href='{krowsnesturl}/api/config/{testcluster}/services/{name}/name'><img src='images/json.jpg'></img></a>` {
-    t.Errorf("Service String does not match expected value.")
-  }
-}
-func TestServiceString(t *testing.T) {
-}
-func TestServiceString(t *testing.T) {
-}
-func TestServiceString(t *testing.T) {
-}
-func TestServiceString(t *testing.T) {
-}
-func TestServiceString(t *testing.T) {
-}
