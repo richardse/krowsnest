@@ -1503,6 +1503,128 @@
                 "qosClass": "Burstable",
                 "startTime": "2021-04-03T19:27:33Z"
             }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "creationTimestamp": "2021-04-03T19:27:21Z",
+                "generateName": "my-release-wordpress-67855bb4bc-",
+                "labels": {
+                    "app.kubernetes.io/instance": "pod",
+                    "app.kubernetes.io/name": "kubernetes"
+                },
+                "name": "kubernetes",
+                "namespace": "default",
+                "resourceVersion": "61576",
+                "selfLink": "/api/v1/namespaces/default/pods/my-release-wordpress-67855bb4bc-rzrfd",
+                "uid": "1844e083-5db8-4f8f-9e98-f78d6c6e42d7"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "docker.io/bitnami/wordpress:5.7.0-debian-10-r11",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "wordpress",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "name": "http",
+                                "protocol": "TCP"
+                            },
+                            {
+                                "containerPort": 8443,
+                                "name": "https",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/bitnami/wordpress",
+                                "name": "wordpress-data",
+                                "subPath": "wordpress"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "default-token-kjlvs",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "volumes": [
+                    {
+                        "name": "wordpress-data",
+                        "persistentVolumeClaim": {
+                            "claimName": "my-release-wordpress"
+                        }
+                    },
+                    {
+                        "name": "default-token-kjlvs",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "default-token-kjlvs"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-04-03T19:27:33Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-04-03T19:27:33Z",
+                        "message": null,
+                        "reason": null,
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-04-03T19:27:33Z",
+                        "message": null,
+                        "reason": null,
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-04-03T19:27:33Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://1e18a9609843738cbde94bf891a497bc19e741c5e7c34a1f05d1e0f11105d649",
+                        "image": "docker.io/bitnami/wordpress:5.7.0-debian-10-r11",
+                        "imageID": "docker.io/bitnami/wordpress@sha256:12a17bfcabc344347b6826faa72bdc283cebf440367b4f495ec0301ab5cb0135",
+                        "lastState": {
+                            "running": {
+                                "startedAt": "2021-04-03T19:33:24Z"
+                            }
+                        },
+                        "name": "wordpress",
+                        "ready": true,
+                        "restartCount": 4,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2021-04-03T19:33:24Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "startTime": "2021-04-03T19:27:33Z"
+            }
         }
     ],
     "kind": "List",

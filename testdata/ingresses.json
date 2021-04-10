@@ -1,0 +1,48 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "extensions/v1beta1",
+      "kind": "Ingress",
+      "metadata": {
+        "name": "example-ingress",
+        "annotations": {
+          "ingress.kubernetes.io/rewrite-target": "/"
+        }
+      },
+      "spec": {
+        "rules": [
+          {
+            "host": "www.example.com",
+            "http": {
+              "paths": [
+                {
+                  "path": "/",
+                  "backend": {
+                    "serviceName": "my-release-wordpress",
+                    "servicePort": 80
+                  }
+                },
+                {
+                  "path": "/banana",
+                  "backend": {
+                    "serviceName": "my-release-wordpress",
+                    "servicePort": 80
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "tls": [
+          {
+            "hosts": [
+              "www.example.com"
+            ],
+            "secretName": "testsecret-tls"
+          }
+        ]
+      }
+    }
+  ]
+}

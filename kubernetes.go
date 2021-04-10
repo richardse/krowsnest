@@ -1,107 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
+	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/selection"
 )
-
-func loadPods() apiv1.PodList {
-	file, err := os.Open("testdata/pods.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj apiv1.PodList
-	dec.Decode(&obj)
-	return obj
-}
-
-func loadServices() apiv1.ServiceList {
-	file, err := os.Open("testdata/services.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj apiv1.ServiceList
-	dec.Decode(&obj)
-	return obj
-}
-
-func loadDaemonSets() appsv1.DaemonSetList {
-	file, err := os.Open("testdata/daemonsets.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj appsv1.DaemonSetList
-	dec.Decode(&obj)
-	return obj
-}
-
-func loadDeployments() appsv1.DeploymentList {
-	file, err := os.Open("testdata/deployments.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj appsv1.DeploymentList
-	dec.Decode(&obj)
-	return obj
-}
-
-func loadStatefulSets() appsv1.StatefulSetList {
-	file, err := os.Open("testdata/statefulsets.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj appsv1.StatefulSetList
-	dec.Decode(&obj)
-	return obj
-}
-
-func loadReplicaSets() appsv1.ReplicaSetList {
-	file, err := os.Open("testdata/replicasets.json")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	dec := json.NewDecoder(file)
-	var obj appsv1.ReplicaSetList
-	dec.Decode(&obj)
-	return obj
-}
-
-func subgraph(name string, graph string) string {
-	return fmt.Sprintf("subgraph %s\n%send\n", name, graph)
-}
-
-func podNode(obj apiv1.Pod) string {
-	return fmt.Sprintf("POD%s\n", obj.ObjectMeta.Name)
-}
-
-func serviceNode(obj apiv1.Service) string {
-	return fmt.Sprintf("SVC%s\n", obj.ObjectMeta.Name)
-}
-
-func statefulSetNode(obj appsv1.StatefulSet) string {
-	return fmt.Sprintf("SSET%s\n", obj.ObjectMeta.Name)
-}
-
-func replicaSetNode(obj appsv1.ReplicaSet) string {
-	return fmt.Sprintf("RSET%s\n", obj.ObjectMeta.Name)
-}
 
 func contains(s []string, e string) bool {
 	for _, a := range s {
@@ -112,7 +19,16 @@ func contains(s []string, e string) bool {
 	return false
 }
 
-func containsKey(s map[string]string, e string) bool {
+func containsKeyStrStr(s map[string]string, e string) bool {
+	for a, _ := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func containsKeyStrInt(s map[string]int, e string) bool {
 	for a, _ := range s {
 		if a == e {
 			return true
@@ -143,7 +59,7 @@ func selectPods(pods []apiv1.Pod, matchExpressions []v1.LabelSelectorRequirement
 
 			switch op {
 			case "in":
-				if !containsKey(labels, key) {
+				if !containsKeyStrStr(labels, key) {
 					matched = false
 					break
 				}
@@ -157,12 +73,12 @@ func selectPods(pods []apiv1.Pod, matchExpressions []v1.LabelSelectorRequirement
 			case "NotIn":
 				// TODO
 			case "Exists":
-				if !containsKey(labels, key) {
+				if !containsKeyStrStr(labels, key) {
 					matched = false
 					break
 				}
 			case "DoesNotExist":
-				if containsKey(labels, key) {
+				if containsKeyStrStr(labels, key) {
 					matched = false
 					break
 				}
@@ -175,6 +91,16 @@ func selectPods(pods []apiv1.Pod, matchExpressions []v1.LabelSelectorRequirement
 	}
 
 	return foundPods
+}
+
+func selectServices(ingressName string, services []apiv1.Service, rules []extensionsv1beta1.IngressRule) []string {
+	var response []string
+	for _, rule := range rules {
+		for _, path := range rule.HTTP.Paths {
+			response = append(response, fmt.Sprintf("ING%s -- %s%s --> SVC%s%v\n", ingressName, rule.Host, path.Path, path.Backend.ServiceName, path.Backend.ServicePort.IntVal))
+		}
+	}
+	return response
 }
 
 func labelsSelected(labels map[string]string, selectors map[string]string) bool {
@@ -206,65 +132,35 @@ func selectSets(sets map[string]map[string]string, selectors map[string]string) 
 
 	return foundSets
 }
-func selectStatefulSets(sets []appsv1.StatefulSet, selectors map[string]string) []string {
-	setMap := make(map[string]map[string]string, len(sets))
+
+func selectStatefulSets(sets []appsv1.StatefulSet, selectors map[string]string) []appsv1.StatefulSet {
+	setLabelMap := make(map[string]map[string]string, len(sets))
+	setMap := make(map[string]appsv1.StatefulSet, len(sets))
 	for _, set := range sets {
 		if set.Status.Replicas > 0 {
-			setMap[set.ObjectMeta.Name] = set.ObjectMeta.Labels
+			setLabelMap[set.ObjectMeta.Name] = set.ObjectMeta.Labels
+			setMap[set.ObjectMeta.Name] = set
 		}
 	}
-	return selectSets(setMap, selectors)
+	var response = make([]appsv1.StatefulSet, 0)
+	for _, selected := range selectSets(setLabelMap, selectors) {
+		response = append(response, setMap[selected])
+	}
+	return response
 }
-func selectReplicaSets(sets []appsv1.ReplicaSet, selectors map[string]string) []string {
-	setMap := make(map[string]map[string]string, len(sets))
+
+func selectReplicaSets(sets []appsv1.ReplicaSet, selectors map[string]string) []appsv1.ReplicaSet {
+	setLabelMap := make(map[string]map[string]string, len(sets))
+	setMap := make(map[string]appsv1.ReplicaSet, len(sets))
 	for _, set := range sets {
 		if set.Status.Replicas > 0 {
-			setMap[set.ObjectMeta.Name] = set.ObjectMeta.Labels
+			setLabelMap[set.ObjectMeta.Name] = set.ObjectMeta.Labels
+			setMap[set.ObjectMeta.Name] = set
 		}
 	}
-	return selectSets(setMap, selectors)
-}
-
-func generateChart(podList apiv1.PodList, serviceList apiv1.ServiceList, statefulSetList appsv1.StatefulSetList, replicaSetList appsv1.ReplicaSetList) string {
-	chart := "graph LR\n"
-
-	podGraph := ""
-	serviceGraph := ""
-	setGraph := ""
-	edges := ""
-
-	for _, obj := range podList.Items {
-		podGraph += podNode(obj)
+	var response = make([]appsv1.ReplicaSet, 0)
+	for _, selected := range selectSets(setLabelMap, selectors) {
+		response = append(response, setMap[selected])
 	}
-	for _, obj := range serviceList.Items {
-		serviceGraph += serviceNode(obj)
-		for _, selectedPod := range selectStatefulSets(statefulSetList.Items, obj.Spec.Selector) {
-			edges += fmt.Sprintf("SVC%s --> SSET%s\n", obj.ObjectMeta.Name, selectedPod)
-		}
-		for _, selectedPod := range selectReplicaSets(replicaSetList.Items, obj.Spec.Selector) {
-			edges += fmt.Sprintf("SVC%s --> RSET%s\n", obj.ObjectMeta.Name, selectedPod)
-		}
-	}
-	for _, obj := range statefulSetList.Items {
-		setGraph += statefulSetNode(obj)
-		for _, selectedPod := range selectPods(podList.Items, obj.Spec.Selector.MatchExpressions, obj.Spec.Selector.MatchLabels) {
-			edges += fmt.Sprintf("SSET%s --> POD%s\n", obj.ObjectMeta.Name, selectedPod)
-		}
-	}
-	for _, obj := range replicaSetList.Items {
-		setGraph += replicaSetNode(obj)
-		for _, selectedPod := range selectPods(podList.Items, obj.Spec.Selector.MatchExpressions, obj.Spec.Selector.MatchLabels) {
-			edges += fmt.Sprintf("RSET%s --> POD%s\n", obj.ObjectMeta.Name, selectedPod)
-		}
-	}
-
-	return chart +
-		subgraph("Pods", podGraph) +
-		subgraph("Services", serviceGraph) +
-		subgraph("Sets", setGraph) +
-		edges
-}
-
-func main() {
-	fmt.Println(generateChart(loadPods(), loadServices(), loadStatefulSets(), loadReplicaSets()))
+	return response
 }
