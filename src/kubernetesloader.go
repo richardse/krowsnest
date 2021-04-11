@@ -1,18 +1,19 @@
 package main
 
 import (
-	"context"
+	// "context"
 	"encoding/json"
 	"os"
 
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
 	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	// metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	// "k8s.io/client-go/kubernetes"
+	// "k8s.io/client-go/rest"
 )
 
+/*
 func getK8sClient() *kubernetes.Clientset {
 	config, err := rest.InClusterConfig()
 	if err != nil {
@@ -26,16 +27,28 @@ func getK8sClient() *kubernetes.Clientset {
 
 	return clientset
 }
+*/
 
-func loadPods(clientset kubernetes.Clientset) *apiv1.PodList {
+//func loadPods(clientset kubernetes.Clientset) *apiv1.PodList {
 	// get pods in all the namespaces by omitting namespace
 	// Or specify namespace to get pods in particular namespace
-	pods, err := clientset.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{})
+	//pods, err := clientset.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{})
+	//if err != nil {
+	//	panic(err.Error())
+	//}
+
+	//return pods
+
+func loadPods() apiv1.PodList {
+	file, err := os.Open("testdata/services.json")
 	if err != nil {
 		panic(err.Error())
 	}
 
-	return pods
+	dec := json.NewDecoder(file)
+	var obj apiv1.PodList
+	dec.Decode(&obj)
+	return obj
 }
 
 func loadServices() apiv1.ServiceList {
