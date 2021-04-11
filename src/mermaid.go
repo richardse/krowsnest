@@ -158,9 +158,11 @@ func containerNode(pod apiv1.Pod, container apiv1.Container) string {
 			} else if c.State.Waiting != nil {
 				statusMessage = c.State.Waiting.Message
 			}
-			return fmt.Sprintf("CNT%s%s(\"%s<br />%s\")", pod.ObjectMeta.Name, container.Name, container.Name, statusMessage)
+			return fmt.Sprintf("CNT%s%s(\"%s<br />%s\")\n", pod.ObjectMeta.Name, container.Name, container.Name, statusMessage)
 		}
 	}
+
+  return ""
 }
 
 func selectorToString(selectors map[string]string) string {
@@ -246,8 +248,4 @@ func generateChart(podList apiv1.PodList, serviceList apiv1.ServiceList, statefu
 		subgraph("Services", serviceGraph) +
 		subgraph("Sets", setGraph) +
 		edges
-}
-
-func amain() {
-	fmt.Println(generateChart(loadPods(), loadServices(), loadStatefulSets(), loadReplicaSets(), loadIngresses()))
 }
