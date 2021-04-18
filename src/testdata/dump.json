@@ -1,0 +1,650 @@
+{
+  "apiVersion": "v1",
+  "items": [
+      {
+          "apiVersion": "v1",
+          "kind": "Pod",
+          "metadata": {
+              "creationTimestamp": "2021-04-11T23:06:32Z",
+              "generateName": "krowsnest-756fc9d459-",
+              "labels": {
+                  "app": "krowsnest",
+                  "pod-template-hash": "756fc9d459"
+              },
+              "managedFields": [
+                  {
+                      "apiVersion": "v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:metadata": {
+                              "f:generateName": {},
+                              "f:labels": {
+                                  ".": {},
+                                  "f:app": {},
+                                  "f:pod-template-hash": {}
+                              },
+                              "f:ownerReferences": {
+                                  ".": {},
+                                  "k:{\"uid\":\"e6e2ecde-ce1f-4eb9-9288-d189d8439399\"}": {
+                                      ".": {},
+                                      "f:apiVersion": {},
+                                      "f:blockOwnerDeletion": {},
+                                      "f:controller": {},
+                                      "f:kind": {},
+                                      "f:name": {},
+                                      "f:uid": {}
+                                  }
+                              }
+                          },
+                          "f:spec": {
+                              "f:containers": {
+                                  "k:{\"name\":\"krowsnest\"}": {
+                                      ".": {},
+                                      "f:image": {},
+                                      "f:imagePullPolicy": {},
+                                      "f:name": {},
+                                      "f:resources": {},
+                                      "f:terminationMessagePath": {},
+                                      "f:terminationMessagePolicy": {}
+                                  }
+                              },
+                              "f:dnsPolicy": {},
+                              "f:enableServiceLinks": {},
+                              "f:restartPolicy": {},
+                              "f:schedulerName": {},
+                              "f:securityContext": {},
+                              "f:terminationGracePeriodSeconds": {}
+                          }
+                      },
+                      "manager": "kube-controller-manager",
+                      "operation": "Update",
+                      "time": "2021-04-11T23:06:32Z"
+                  },
+                  {
+                      "apiVersion": "v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:status": {
+                              "f:conditions": {
+                                  "k:{\"type\":\"ContainersReady\"}": {
+                                      ".": {},
+                                      "f:lastProbeTime": {},
+                                      "f:lastTransitionTime": {},
+                                      "f:status": {},
+                                      "f:type": {}
+                                  },
+                                  "k:{\"type\":\"Initialized\"}": {
+                                      ".": {},
+                                      "f:lastProbeTime": {},
+                                      "f:lastTransitionTime": {},
+                                      "f:status": {},
+                                      "f:type": {}
+                                  },
+                                  "k:{\"type\":\"Ready\"}": {
+                                      ".": {},
+                                      "f:lastProbeTime": {},
+                                      "f:lastTransitionTime": {},
+                                      "f:status": {},
+                                      "f:type": {}
+                                  }
+                              },
+                              "f:containerStatuses": {},
+                              "f:hostIP": {},
+                              "f:phase": {},
+                              "f:podIP": {},
+                              "f:podIPs": {
+                                  ".": {},
+                                  "k:{\"ip\":\"10.244.1.4\"}": {
+                                      ".": {},
+                                      "f:ip": {}
+                                  }
+                              },
+                              "f:startTime": {}
+                          }
+                      },
+                      "manager": "kubelet",
+                      "operation": "Update",
+                      "time": "2021-04-11T23:06:42Z"
+                  }
+              ],
+              "name": "krowsnest-756fc9d459-qrqw7",
+              "namespace": "default",
+              "ownerReferences": [
+                  {
+                      "apiVersion": "apps/v1",
+                      "blockOwnerDeletion": true,
+                      "controller": true,
+                      "kind": "ReplicaSet",
+                      "name": "krowsnest-756fc9d459",
+                      "uid": "e6e2ecde-ce1f-4eb9-9288-d189d8439399"
+                  }
+              ],
+              "resourceVersion": "4816",
+              "selfLink": "/api/v1/namespaces/default/pods/krowsnest-756fc9d459-qrqw7",
+              "uid": "f326460d-6cac-48c5-989a-79d41bc6c3ab"
+          },
+          "spec": {
+              "containers": [
+                  {
+                      "image": "candourr/krowsnest:latest",
+                      "imagePullPolicy": "Always",
+                      "name": "krowsnest",
+                      "resources": {},
+                      "terminationMessagePath": "/dev/termination-log",
+                      "terminationMessagePolicy": "File",
+                      "volumeMounts": [
+                          {
+                              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                              "name": "default-token-kh752",
+                              "readOnly": true
+                          }
+                      ]
+                  }
+              ],
+              "dnsPolicy": "ClusterFirst",
+              "enableServiceLinks": true,
+              "nodeName": "node01",
+              "priority": 0,
+              "restartPolicy": "Always",
+              "schedulerName": "default-scheduler",
+              "securityContext": {},
+              "serviceAccount": "default",
+              "serviceAccountName": "default",
+              "terminationGracePeriodSeconds": 30,
+              "tolerations": [
+                  {
+                      "effect": "NoExecute",
+                      "key": "node.kubernetes.io/not-ready",
+                      "operator": "Exists",
+                      "tolerationSeconds": 300
+                  },
+                  {
+                      "effect": "NoExecute",
+                      "key": "node.kubernetes.io/unreachable",
+                      "operator": "Exists",
+                      "tolerationSeconds": 300
+                  }
+              ],
+              "volumes": [
+                  {
+                      "name": "default-token-kh752",
+                      "secret": {
+                          "defaultMode": 420,
+                          "secretName": "default-token-kh752"
+                      }
+                  }
+              ]
+          },
+          "status": {
+              "conditions": [
+                  {
+                      "lastProbeTime": null,
+                      "lastTransitionTime": "2021-04-11T23:06:32Z",
+                      "status": "True",
+                      "type": "Initialized"
+                  },
+                  {
+                      "lastProbeTime": null,
+                      "lastTransitionTime": "2021-04-11T23:06:43Z",
+                      "status": "True",
+                      "type": "Ready"
+                  },
+                  {
+                      "lastProbeTime": null,
+                      "lastTransitionTime": "2021-04-11T23:06:43Z",
+                      "status": "True",
+                      "type": "ContainersReady"
+                  },
+                  {
+                      "lastProbeTime": null,
+                      "lastTransitionTime": "2021-04-11T23:06:32Z",
+                      "status": "True",
+                      "type": "PodScheduled"
+                  }
+              ],
+              "containerStatuses": [
+                  {
+                      "containerID": "docker://92040079ebdeb68f0bd9bbc51bf205754220d78f548bf47e7a3d305740d617a9",
+                      "image": "candourr/krowsnest:latest",
+                      "imageID": "docker-pullable://candourr/krowsnest@sha256:f20e581e10671fbd6b66887af6e0b05846f94d131d965e0fcfc1b4a458b9edb7",
+                      "lastState": {},
+                      "name": "krowsnest",
+                      "ready": true,
+                      "restartCount": 0,
+                      "started": true,
+                      "state": {
+                          "running": {
+                              "startedAt": "2021-04-11T23:06:42Z"
+                          }
+                      }
+                  }
+              ],
+              "hostIP": "172.17.0.43",
+              "phase": "Running",
+              "podIP": "10.244.1.4",
+              "podIPs": [
+                  {
+                      "ip": "10.244.1.4"
+                  }
+              ],
+              "qosClass": "BestEffort",
+              "startTime": "2021-04-11T23:06:32Z"
+          }
+      },
+      {
+          "apiVersion": "v1",
+          "kind": "Service",
+          "metadata": {
+              "creationTimestamp": "2021-04-11T22:36:05Z",
+              "labels": {
+                  "component": "apiserver",
+                  "provider": "kubernetes"
+              },
+              "managedFields": [
+                  {
+                      "apiVersion": "v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:metadata": {
+                              "f:labels": {
+                                  ".": {},
+                                  "f:component": {},
+                                  "f:provider": {}
+                              }
+                          },
+                          "f:spec": {
+                              "f:clusterIP": {},
+                              "f:ports": {
+                                  ".": {},
+                                  "k:{\"port\":443,\"protocol\":\"TCP\"}": {
+                                      ".": {},
+                                      "f:name": {},
+                                      "f:port": {},
+                                      "f:protocol": {},
+                                      "f:targetPort": {}
+                                  }
+                              },
+                              "f:sessionAffinity": {},
+                              "f:type": {}
+                          }
+                      },
+                      "manager": "kube-apiserver",
+                      "operation": "Update",
+                      "time": "2021-04-11T22:36:05Z"
+                  }
+              ],
+              "name": "kubernetes",
+              "namespace": "default",
+              "resourceVersion": "155",
+              "selfLink": "/api/v1/namespaces/default/services/kubernetes",
+              "uid": "f6f37d3a-ed14-4f0e-b23b-f860f888808c"
+          },
+          "spec": {
+              "clusterIP": "10.96.0.1",
+              "ports": [
+                  {
+                      "name": "https",
+                      "port": 443,
+                      "protocol": "TCP",
+                      "targetPort": 6443
+                  }
+              ],
+              "sessionAffinity": "None",
+              "type": "ClusterIP"
+          },
+          "status": {
+              "loadBalancer": {}
+          }
+      },
+      {
+          "apiVersion": "apps/v1",
+          "kind": "Deployment",
+          "metadata": {
+              "annotations": {
+                  "deployment.kubernetes.io/revision": "1"
+              },
+              "creationTimestamp": "2021-04-11T23:06:32Z",
+              "generation": 1,
+              "labels": {
+                  "app": "krowsnest"
+              },
+              "managedFields": [
+                  {
+                      "apiVersion": "apps/v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:metadata": {
+                              "f:labels": {
+                                  ".": {},
+                                  "f:app": {}
+                              }
+                          },
+                          "f:spec": {
+                              "f:progressDeadlineSeconds": {},
+                              "f:replicas": {},
+                              "f:revisionHistoryLimit": {},
+                              "f:selector": {
+                                  "f:matchLabels": {
+                                      ".": {},
+                                      "f:app": {}
+                                  }
+                              },
+                              "f:strategy": {
+                                  "f:rollingUpdate": {
+                                      ".": {},
+                                      "f:maxSurge": {},
+                                      "f:maxUnavailable": {}
+                                  },
+                                  "f:type": {}
+                              },
+                              "f:template": {
+                                  "f:metadata": {
+                                      "f:labels": {
+                                          ".": {},
+                                          "f:app": {}
+                                      }
+                                  },
+                                  "f:spec": {
+                                      "f:containers": {
+                                          "k:{\"name\":\"krowsnest\"}": {
+                                              ".": {},
+                                              "f:image": {},
+                                              "f:imagePullPolicy": {},
+                                              "f:name": {},
+                                              "f:resources": {},
+                                              "f:terminationMessagePath": {},
+                                              "f:terminationMessagePolicy": {}
+                                          }
+                                      },
+                                      "f:dnsPolicy": {},
+                                      "f:restartPolicy": {},
+                                      "f:schedulerName": {},
+                                      "f:securityContext": {},
+                                      "f:terminationGracePeriodSeconds": {}
+                                  }
+                              }
+                          }
+                      },
+                      "manager": "kubectl",
+                      "operation": "Update",
+                      "time": "2021-04-11T23:06:32Z"
+                  },
+                  {
+                      "apiVersion": "apps/v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:metadata": {
+                              "f:annotations": {
+                                  ".": {},
+                                  "f:deployment.kubernetes.io/revision": {}
+                              }
+                          },
+                          "f:status": {
+                              "f:availableReplicas": {},
+                              "f:conditions": {
+                                  ".": {},
+                                  "k:{\"type\":\"Available\"}": {
+                                      ".": {},
+                                      "f:lastTransitionTime": {},
+                                      "f:lastUpdateTime": {},
+                                      "f:message": {},
+                                      "f:reason": {},
+                                      "f:status": {},
+                                      "f:type": {}
+                                  },
+                                  "k:{\"type\":\"Progressing\"}": {
+                                      ".": {},
+                                      "f:lastTransitionTime": {},
+                                      "f:lastUpdateTime": {},
+                                      "f:message": {},
+                                      "f:reason": {},
+                                      "f:status": {},
+                                      "f:type": {}
+                                  }
+                              },
+                              "f:observedGeneration": {},
+                              "f:readyReplicas": {},
+                              "f:replicas": {},
+                              "f:updatedReplicas": {}
+                          }
+                      },
+                      "manager": "kube-controller-manager",
+                      "operation": "Update",
+                      "time": "2021-04-11T23:06:42Z"
+                  }
+              ],
+              "name": "krowsnest",
+              "namespace": "default",
+              "resourceVersion": "4818",
+              "selfLink": "/apis/apps/v1/namespaces/default/deployments/krowsnest",
+              "uid": "ccb181f4-03d5-4c36-88ef-6aa143e05158"
+          },
+          "spec": {
+              "progressDeadlineSeconds": 600,
+              "replicas": 1,
+              "revisionHistoryLimit": 10,
+              "selector": {
+                  "matchLabels": {
+                      "app": "krowsnest"
+                  }
+              },
+              "strategy": {
+                  "rollingUpdate": {
+                      "maxSurge": "25%",
+                      "maxUnavailable": "25%"
+                  },
+                  "type": "RollingUpdate"
+              },
+              "template": {
+                  "metadata": {
+                      "creationTimestamp": null,
+                      "labels": {
+                          "app": "krowsnest"
+                      }
+                  },
+                  "spec": {
+                      "containers": [
+                          {
+                              "image": "candourr/krowsnest:latest",
+                              "imagePullPolicy": "Always",
+                              "name": "krowsnest",
+                              "resources": {},
+                              "terminationMessagePath": "/dev/termination-log",
+                              "terminationMessagePolicy": "File"
+                          }
+                      ],
+                      "dnsPolicy": "ClusterFirst",
+                      "restartPolicy": "Always",
+                      "schedulerName": "default-scheduler",
+                      "securityContext": {},
+                      "terminationGracePeriodSeconds": 30
+                  }
+              }
+          },
+          "status": {
+              "availableReplicas": 1,
+              "conditions": [
+                  {
+                      "lastTransitionTime": "2021-04-11T23:06:42Z",
+                      "lastUpdateTime": "2021-04-11T23:06:42Z",
+                      "message": "Deployment has minimum availability.",
+                      "reason": "MinimumReplicasAvailable",
+                      "status": "True",
+                      "type": "Available"
+                  },
+                  {
+                      "lastTransitionTime": "2021-04-11T23:06:32Z",
+                      "lastUpdateTime": "2021-04-11T23:06:42Z",
+                      "message": "ReplicaSet \"krowsnest-756fc9d459\" has successfully progressed.",
+                      "reason": "NewReplicaSetAvailable",
+                      "status": "True",
+                      "type": "Progressing"
+                  }
+              ],
+              "observedGeneration": 1,
+              "readyReplicas": 1,
+              "replicas": 1,
+              "updatedReplicas": 1
+          }
+      },
+      {
+          "apiVersion": "apps/v1",
+          "kind": "ReplicaSet",
+          "metadata": {
+              "annotations": {
+                  "deployment.kubernetes.io/desired-replicas": "1",
+                  "deployment.kubernetes.io/max-replicas": "2",
+                  "deployment.kubernetes.io/revision": "1"
+              },
+              "creationTimestamp": "2021-04-11T23:06:32Z",
+              "generation": 1,
+              "labels": {
+                  "app": "krowsnest",
+                  "pod-template-hash": "756fc9d459"
+              },
+              "managedFields": [
+                  {
+                      "apiVersion": "apps/v1",
+                      "fieldsType": "FieldsV1",
+                      "fieldsV1": {
+                          "f:metadata": {
+                              "f:annotations": {
+                                  ".": {},
+                                  "f:deployment.kubernetes.io/desired-replicas": {},
+                                  "f:deployment.kubernetes.io/max-replicas": {},
+                                  "f:deployment.kubernetes.io/revision": {}
+                              },
+                              "f:labels": {
+                                  ".": {},
+                                  "f:app": {},
+                                  "f:pod-template-hash": {}
+                              },
+                              "f:ownerReferences": {
+                                  ".": {},
+                                  "k:{\"uid\":\"ccb181f4-03d5-4c36-88ef-6aa143e05158\"}": {
+                                      ".": {},
+                                      "f:apiVersion": {},
+                                      "f:blockOwnerDeletion": {},
+                                      "f:controller": {},
+                                      "f:kind": {},
+                                      "f:name": {},
+                                      "f:uid": {}
+                                  }
+                              }
+                          },
+                          "f:spec": {
+                              "f:replicas": {},
+                              "f:selector": {
+                                  "f:matchLabels": {
+                                      ".": {},
+                                      "f:app": {},
+                                      "f:pod-template-hash": {}
+                                  }
+                              },
+                              "f:template": {
+                                  "f:metadata": {
+                                      "f:labels": {
+                                          ".": {},
+                                          "f:app": {},
+                                          "f:pod-template-hash": {}
+                                      }
+                                  },
+                                  "f:spec": {
+                                      "f:containers": {
+                                          "k:{\"name\":\"krowsnest\"}": {
+                                              ".": {},
+                                              "f:image": {},
+                                              "f:imagePullPolicy": {},
+                                              "f:name": {},
+                                              "f:resources": {},
+                                              "f:terminationMessagePath": {},
+                                              "f:terminationMessagePolicy": {}
+                                          }
+                                      },
+                                      "f:dnsPolicy": {},
+                                      "f:restartPolicy": {},
+                                      "f:schedulerName": {},
+                                      "f:securityContext": {},
+                                      "f:terminationGracePeriodSeconds": {}
+                                  }
+                              }
+                          },
+                          "f:status": {
+                              "f:availableReplicas": {},
+                              "f:fullyLabeledReplicas": {},
+                              "f:observedGeneration": {},
+                              "f:readyReplicas": {},
+                              "f:replicas": {}
+                          }
+                      },
+                      "manager": "kube-controller-manager",
+                      "operation": "Update",
+                      "time": "2021-04-11T23:06:42Z"
+                  }
+              ],
+              "name": "krowsnest-756fc9d459",
+              "namespace": "default",
+              "ownerReferences": [
+                  {
+                      "apiVersion": "apps/v1",
+                      "blockOwnerDeletion": true,
+                      "controller": true,
+                      "kind": "Deployment",
+                      "name": "krowsnest",
+                      "uid": "ccb181f4-03d5-4c36-88ef-6aa143e05158"
+                  }
+              ],
+              "resourceVersion": "4817",
+              "selfLink": "/apis/apps/v1/namespaces/default/replicasets/krowsnest-756fc9d459",
+              "uid": "e6e2ecde-ce1f-4eb9-9288-d189d8439399"
+          },
+          "spec": {
+              "replicas": 1,
+              "selector": {
+                  "matchLabels": {
+                      "app": "krowsnest",
+                      "pod-template-hash": "756fc9d459"
+                  }
+              },
+              "template": {
+                  "metadata": {
+                      "creationTimestamp": null,
+                      "labels": {
+                          "app": "krowsnest",
+                          "pod-template-hash": "756fc9d459"
+                      }
+                  },
+                  "spec": {
+                      "containers": [
+                          {
+                              "image": "candourr/krowsnest:latest",
+                              "imagePullPolicy": "Always",
+                              "name": "krowsnest",
+                              "resources": {},
+                              "terminationMessagePath": "/dev/termination-log",
+                              "terminationMessagePolicy": "File"
+                          }
+                      ],
+                      "dnsPolicy": "ClusterFirst",
+                      "restartPolicy": "Always",
+                      "schedulerName": "default-scheduler",
+                      "securityContext": {},
+                      "terminationGracePeriodSeconds": 30
+                  }
+              }
+          },
+          "status": {
+              "availableReplicas": 1,
+              "fullyLabeledReplicas": 1,
+              "observedGeneration": 1,
+              "readyReplicas": 1,
+              "replicas": 1
+          }
+      }
+  ],
+  "kind": "List",
+  "metadata": {
+      "resourceVersion": "",
+      "selfLink": ""
+  }
+}

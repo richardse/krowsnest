@@ -5,6 +5,74 @@
             "apiVersion": "v1",
             "kind": "Service",
             "metadata": {
+                "creationTimestamp": "2021-04-11T22:36:05Z",
+                "labels": {
+                    "package": "krowsnest"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:component": {},
+                                    "f:provider": {}
+                                }
+                            },
+                            "f:spec": {
+                                "f:clusterIP": {},
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":443,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "kube-apiserver",
+                        "operation": "Update",
+                        "time": "2021-04-11T22:36:05Z"
+                    }
+                ],
+                "name": "krowsnest",
+                "namespace": "default",
+                "resourceVersion": "155",
+                "selfLink": "/api/v1/namespaces/default/services/kubernetes",
+                "uid": "f6f37d3a-ed14-4f0e-b23b-f860f888808c"
+            },
+            "spec": {
+                "clusterIP": "10.96.0.1",
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 443,
+                        "protocol": "TCP",
+                        "targetPort": 6443
+                    }
+                ],
+                "selector": {
+                    "app": "krowsnest",
+                    "pod-template-hash": "756fc9d459"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },  
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
                 "creationTimestamp": "2021-04-02T19:05:32Z",
                 "labels": {
                     "component": "apiserver",

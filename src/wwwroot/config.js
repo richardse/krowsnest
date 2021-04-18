@@ -1,0 +1,1 @@
+namespace_url = "/xhr/ns.json"
