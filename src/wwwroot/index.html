@@ -2,9 +2,11 @@
   <head>
     <title>Krows Nest</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="/static/config.js"></script>
     <script src="/static/krowsnest.js"></script>
   </head>
-  <body onload="initMermaid()">
+  <body onload="init()">
+    <form><select name="ns" id="selectns"><option value="">Loading...</option></select></form>
     <div id="graph">Loading...</div>
   </body>
 </html>

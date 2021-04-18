@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html"
+	"sort"
 	"strings"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -31,8 +32,24 @@ func fS(str string) string {
 	return strings.ReplaceAll(str, "default", "defau1t")
 }
 
-func subgraph(name string, graph string) string {
+func subgraphstr(name string, graph string) string {
 	return fmt.Sprintf("subgraph %s\n%send\n", name, graph)
+}
+
+func subgraph(name string, graph map[string]bool) string {
+	graphSlice := make([]string, len(graph))
+	i := 0
+	for k, _ := range graph {
+		graphSlice[i] = k
+		i++
+	}
+	sort.Strings(graphSlice)
+
+	graphstr := ""
+	for _, g := range graphSlice {
+		graphstr += g
+	}
+	return fmt.Sprintf("subgraph %s\n%send\n", name, graphstr)
 }
 
 func podNode(obj apiv1.Pod) string {
@@ -123,24 +140,54 @@ func serviceNode(obj apiv1.Service, port apiv1.ServicePort) string {
 }
 
 func statefulSetNode(obj appsv1.StatefulSet) string {
-	return fmt.Sprintf("SSET%s(\"%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name)
-}
-
-func replicaSetNode(obj appsv1.ReplicaSet) string {
-	replicas := fmt.Sprintf("<br />Replicas: %d/%d", obj.Status.Replicas, *obj.Spec.Replicas)
+	replicas := fmt.Sprintf("Replicas: %d/%d", obj.Status.Replicas, *obj.Spec.Replicas)
 	if *obj.Spec.Replicas > obj.Status.Replicas {
 		message := "Creation Pending"
 		if obj.Status.Conditions != nil {
 			for _, set := range obj.Status.Conditions {
 				if set.Status == "True" {
-					message = strings.ReplaceAll(set.Message, "\"", " ")
+					message = html.EscapeString(set.Message)
 				}
 			}
 		}
-		replicas = fmt.Sprintf("<br /><a style='color: red' title='%s'>%s {?}</a>", message, replicas)
+		replicas = fmt.Sprintf("<a style='color: red' title='%s'>%s {?}</a>", message, replicas)
 	}
 
-	return fmt.Sprintf("RSET%s(\"%s%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name, replicas)
+	return fmt.Sprintf("SSET%s(\"%s<br />%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name, replicas)
+}
+
+func replicaSetNode(obj appsv1.ReplicaSet) string {
+	replicas := fmt.Sprintf("Replicas: %d/%d", obj.Status.Replicas, *obj.Spec.Replicas)
+	if *obj.Spec.Replicas > obj.Status.Replicas {
+		message := "Creation Pending"
+		if obj.Status.Conditions != nil {
+			for _, set := range obj.Status.Conditions {
+				if set.Status == "True" {
+					message = html.EscapeString(set.Message)
+				}
+			}
+		}
+		replicas = fmt.Sprintf("<a style='color: red' title='%s'>%s {?}</a>", message, replicas)
+	}
+
+	return fmt.Sprintf("RSET%s(\"%s<br />%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name, replicas)
+}
+
+func daemonSetNode(obj appsv1.DaemonSet) string {
+	replicas := fmt.Sprintf("Replicas: %d/%d", obj.Status.NumberReady, obj.Status.DesiredNumberScheduled)
+	if obj.Status.DesiredNumberScheduled > obj.Status.NumberReady {
+		message := "Creation Pending"
+		if obj.Status.Conditions != nil {
+			for _, set := range obj.Status.Conditions {
+				if set.Status == "True" {
+					message = html.EscapeString(set.Message)
+				}
+			}
+		}
+		replicas = fmt.Sprintf("<a style='color: red' title='%s'>%s {?}</a>", message, replicas)
+	}
+
+	return fmt.Sprintf("DSET%s(\"%s<br />%s\")\n", obj.ObjectMeta.Name, obj.ObjectMeta.Name, replicas)
 }
 
 func ingressNode(obj extensionsv1beta1.Ingress) string {
@@ -162,90 +209,100 @@ func containerNode(pod apiv1.Pod, container apiv1.Container) string {
 		}
 	}
 
-  return ""
+	return ""
 }
 
 func selectorToString(selectors map[string]string) string {
 	responses := make([]string, len(selectors))
 	i := 0
 	for k, v := range selectors {
-		if k[0:18] == "app.kubernetes.io/" {
+		if len(k) > 18 && k[0:18] == "app.kubernetes.io/" {
 			k = k[18:]
 		}
 		responses[i] = fmt.Sprintf("%s=%s", k, v)
 		i++
 	}
+	sort.Strings(responses)
 	return strings.Join(responses, ",<br/>")
 }
 
-func generateChart(podList apiv1.PodList, serviceList apiv1.ServiceList, statefulSetList appsv1.StatefulSetList, replicaSetList appsv1.ReplicaSetList, ingressList extensionsv1beta1.IngressList) string {
-
+func generateChart(podList apiv1.PodList, serviceList apiv1.ServiceList, statefulSetList appsv1.StatefulSetList, replicaSetList appsv1.ReplicaSetList, daemonSetList appsv1.DaemonSetList, ingressList extensionsv1beta1.IngressList) string {
 	chart := "graph LR\n"
 
-	podGraph := ""
-	serviceGraph := ""
-	setGraph := ""
-	ingressGraph := ""
-	edges := ""
+	podGraph := make(map[string]bool)
+	serviceGraph := make(map[string]bool)
+	setGraph := make(map[string]bool)
+	ingressGraph := make(map[string]bool)
+	edges := make([]string, 0)
 
 	for _, obj := range podList.Items {
-		podGraph += podNode(obj)
+		podGraph[podNode(obj)] = true
+		if obj.OwnerReferences != nil && len(obj.OwnerReferences) > 0 && obj.OwnerReferences[0].Kind == "DaemonSet" {
+			edges = append(edges, fmt.Sprintf("DSET%s --> POD%s\n", obj.OwnerReferences[0].Name, obj.ObjectMeta.Name))
+		}
+	}
+
+	for _, obj := range daemonSetList.Items {
+		setGraph[daemonSetNode(obj)] = true
 	}
 
 	loadBalanced := false
 	for _, obj := range serviceList.Items {
 		for _, port := range obj.Spec.Ports {
-			serviceGraph += serviceNode(obj, port)
+			serviceGraph[serviceNode(obj, port)] = true
 
 			if obj.Spec.Type == "LoadBalancer" {
 				loadBalanced = true
-				edges += fmt.Sprintf("INGCloudLoadBalancer --> SVC%s%v\n", obj.ObjectMeta.Name, port.Port)
+				edges = append(edges, fmt.Sprintf("INGCloudLoadBalancer --> SVC%s%v", obj.ObjectMeta.Name, port.Port))
 			}
 
 			found := false
 			for _, selectedSet := range selectStatefulSets(statefulSetList.Items, obj.Spec.Selector) {
-				setGraph += statefulSetNode(selectedSet)
-				edges += fmt.Sprintf("SVC%s%d -- %s --> SSET%s\n", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedSet.ObjectMeta.Name)
+				setGraph[statefulSetNode(selectedSet)] = true
+				edges = append(edges, fmt.Sprintf("SVC%s%d -- %s --> SSET%s", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedSet.ObjectMeta.Name))
 				found = true
 			}
 			for _, selectedSet := range selectReplicaSets(replicaSetList.Items, obj.Spec.Selector) {
-				setGraph += replicaSetNode(selectedSet)
-				edges += fmt.Sprintf("SVC%s%d -- %s --> RSET%s\n", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedSet.ObjectMeta.Name)
+				setGraph[replicaSetNode(selectedSet)] = true
+				edges = append(edges, fmt.Sprintf("SVC%s%d -- %s --> RSET%s", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedSet.ObjectMeta.Name))
 				found = true
 			}
 
 			if !found {
 				for _, selectedPod := range selectPods(podList.Items, nil, obj.Spec.Selector) {
-					edges += fmt.Sprintf("SVC%s%d -- %s --> POD%s\n", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedPod)
+					edges = append(edges, fmt.Sprintf("SVC%s%d -- %s --> POD%s", obj.ObjectMeta.Name, port.Port, selectorToString(obj.Spec.Selector), selectedPod))
 				}
 			}
 		}
 	}
+
 	if loadBalanced {
-		ingressGraph += "INGCloudLoadBalancer(\"Cloud LoadBalancer\")\n"
+		ingressGraph["INGCloudLoadBalancer(\"Cloud LoadBalancer\")\n"] = true
 	}
 
 	for _, obj := range statefulSetList.Items {
 		for _, selectedPod := range selectPods(podList.Items, obj.Spec.Selector.MatchExpressions, obj.Spec.Selector.MatchLabels) {
-			edges += fmt.Sprintf("SSET%s --> POD%s\n", obj.ObjectMeta.Name, selectedPod)
+			edges = append(edges, fmt.Sprintf("SSET%s --> POD%s", obj.ObjectMeta.Name, selectedPod))
 		}
 	}
 	for _, obj := range replicaSetList.Items {
 		for _, selectedPod := range selectPods(podList.Items, obj.Spec.Selector.MatchExpressions, obj.Spec.Selector.MatchLabels) {
-			edges += fmt.Sprintf("RSET%s --> POD%s\n", obj.ObjectMeta.Name, selectedPod)
+			edges = append(edges, fmt.Sprintf("RSET%s --> POD%s", obj.ObjectMeta.Name, selectedPod))
 		}
 	}
 	for _, obj := range ingressList.Items {
-		ingressGraph += ingressNode(obj)
+		ingressGraph[ingressNode(obj)] = true
 		for _, ingressToServiceEdge := range selectServices(obj.ObjectMeta.Name, serviceList.Items, obj.Spec.Rules) {
-			edges += ingressToServiceEdge
+			edges = append(edges, ingressToServiceEdge)
 		}
 	}
+
+	sort.Strings(edges)
 
 	return chart +
 		subgraph("Ingresses", ingressGraph) +
 		subgraph("Pods", podGraph) +
 		subgraph("Services", serviceGraph) +
 		subgraph("Sets", setGraph) +
-		edges
+		strings.Join(edges, "\n")
 }

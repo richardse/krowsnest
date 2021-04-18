@@ -97,7 +97,7 @@ func selectServices(ingressName string, services []apiv1.Service, rules []extens
 	var response []string
 	for _, rule := range rules {
 		for _, path := range rule.HTTP.Paths {
-			response = append(response, fmt.Sprintf("ING%s -- %s%s --> SVC%s%v\n", ingressName, rule.Host, path.Path, path.Backend.ServiceName, path.Backend.ServicePort.IntVal))
+			response = append(response, fmt.Sprintf("ING%s -- %s%s --> SVC%s%v", ingressName, rule.Host, path.Path, path.Backend.ServiceName, path.Backend.ServicePort.IntVal))
 		}
 	}
 	return response
