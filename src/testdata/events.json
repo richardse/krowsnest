@@ -96,6 +96,30 @@
         "name": "krowsnest-756fc9d459",
         "namespace": "default"
       }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Event",
+      "metadata": {
+        "name": "someotherpod.166185b1cd1dc668",
+        "namespace": "default"
+      },
+      "type": "Normal",
+      "count": 4636,
+      "firstTimestamp": "2021-02-07T16:59:00Z",
+      "lastTimestamp": "2021-02-08T10:39:04Z",
+      "message": "Back-off pulling image \"example\"",
+      "reason": "BackOff",
+      "source": {
+        "component": "kubelet",
+        "host": "node1"
+      },
+      "involvedObject": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "name": "someotherpod",
+        "namespace": "default"
+      }
     }
   ]
 }
