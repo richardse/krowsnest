@@ -35,6 +35,25 @@ func getK8sClient() *kubernetes.Clientset {
 
 //return pods
 
+type KubernetesObjects struct {
+	pods         v1.PodList
+	services     v1.ServiceList
+	events       v1.EventList
+	statefulsets appsv1.StatefulSetList
+	replicasets  appsv1.ReplicaSetList
+	daemonsets   appsv1.DaemonSetList
+	ingresses    extensionsv1beta1.IngressList
+}
+
+func loadAllTestData() KubernetesObjects {
+	ns := "default"
+	return KubernetesObjects{
+		loadPods(ns), loadServices(ns), loadEvents(ns),
+		loadStatefulSets(ns), loadReplicaSets(ns), loadDaemonSets(ns),
+		loadIngresses(ns),
+	}
+}
+
 func loadTestdata(name string, obj interface{}) {
 	file, err := os.Open("testdata/" + name + ".json")
 	if err != nil {
@@ -54,6 +73,12 @@ func loadPods(ns string) v1.PodList {
 func loadServices(ns string) v1.ServiceList {
 	var obj v1.ServiceList
 	loadTestdata("services", &obj)
+	return obj
+}
+
+func loadEvents(ns string) v1.EventList {
+	var obj v1.EventList
+	loadTestdata("events", &obj)
 	return obj
 }
 

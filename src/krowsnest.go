@@ -25,13 +25,14 @@ func loadK8sData(objtype string) (string, error) {
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("301 %s\n", r.URL.Path)
 	http.Redirect(w, r, "/static/index.html", http.StatusFound)
 }
 
 func staticHandler(w http.ResponseWriter, r *http.Request) {
 	m := validStaticPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
-		fmt.Printf("404 %s\n", r.URL.Path)
+		log.Printf("404 %s\n", r.URL.Path)
 		http.NotFound(w, r)
 		return
 	}
@@ -39,12 +40,12 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 	filename := fmt.Sprintf("wwwroot/%s.%s", m[1], m[2])
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
-		fmt.Printf("404 %s\n", filename)
+		log.Printf("404 %s\n", filename)
 		http.NotFound(w, r)
 		return
 	}
 
-	fmt.Printf("200 %s\n", filename)
+	log.Printf("200 %s\n", filename)
 	fmt.Fprintf(w, string(body))
 }
 
@@ -64,7 +65,7 @@ func configHandler(config Config) func(w http.ResponseWriter, r *http.Request) {
 func xhrHandler(w http.ResponseWriter, r *http.Request) {
 	m := validXhrPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
-		fmt.Printf("404 %s\n", r.URL.Path)
+		log.Printf("404 %s\n", r.URL.Path)
 		http.NotFound(w, r)
 		return
 	}
@@ -72,36 +73,37 @@ func xhrHandler(w http.ResponseWriter, r *http.Request) {
 	filename := fmt.Sprintf("xhrcontent/%s.json", m[1])
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
-		fmt.Printf("404 %s\n", filename)
+		log.Printf("404 %s\n", filename)
 		http.NotFound(w, r)
 		return
 	}
 
-	fmt.Printf("200 %s\n", filename)
+	log.Printf("200 %s\n", filename)
 	fmt.Fprintf(w, string(body))
 }
 
 func k8sHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
 	m := validK8sPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
+		log.Printf("404 %s\n", r.URL.Path)
 		http.NotFound(w, r)
 		return
 	}
 
 	body, err := loadK8sData(m[1])
 	if err != nil {
+		log.Printf("404 %s\n", r.URL.Path)
 		fmt.Println(err.Error())
 		http.NotFound(w, r)
 		return
 	}
 
+	log.Printf("200 %s\n", r.URL.Path)
 	pretty.Fprintf(w, string(body))
 }
 
 func mermaidHandler(w http.ResponseWriter, r *http.Request) {
-	ns := "default"
-	chart := generateChart(loadPods(ns), loadServices(ns), loadStatefulSets(ns), loadReplicaSets(ns), loadDaemonSets(ns), loadIngresses(ns))
+	chart := generateChart(loadAllTestData())
 	fmt.Fprint(w, chart)
 }
 
@@ -114,5 +116,6 @@ func main() {
 	//http.HandleFunc("/config", configHandler(config))
 	http.HandleFunc("/", redirectHandler)
 
+	log.Println("Serving")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

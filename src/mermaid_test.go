@@ -26,8 +26,7 @@ func compareNewlinedStrings(expected string, actual string) bool {
 }
 
 func TestMermaid(t *testing.T) {
-	ns := "default"
-	mermaid := generateChart(loadPods(ns), loadServices(ns), loadStatefulSets(ns), loadReplicaSets(ns), loadDaemonSets(ns), loadIngresses(ns))
+	mermaid := generateChart(loadAllTestData())
 
 	if compareNewlinedStrings(`graph LR
 subgraph Ingresses
@@ -55,7 +54,6 @@ RSETmy-release-wordpress-67855bb4bc("my-release-wordpress-67855bb4bc<br />Replic
 SSETmy-release-mariadb("my-release-mariadb<br />Replicas: 1/1")
 end
 DSETsvclb-my-release-wordpress --> PODsvclb-my-release-wordpress-7dqrn
-
 INGCloudLoadBalancer --> SVCmy-release-wordpress443
 INGCloudLoadBalancer --> SVCmy-release-wordpress80
 INGexample-ingress -- www.example.com/ --> SVCmy-release-wordpress80
